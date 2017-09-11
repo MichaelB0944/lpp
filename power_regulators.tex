@@ -1,0 +1,76 @@
+\documentclass[10pt,letterpaper,twocolumn]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{physics}
+\usepackage{fancyhdr}
+\author{Michael Bradley}
+\title{Power Regulators}
+
+\pagestyle{fancy}
+\fancypagestyle{plain}{}
+\fancyhf{}
+\lhead{Little Papers Pile}
+\rhead{\thepage}
+
+\begin{document}
+	\maketitle
+	\begin{abstract}
+		Often times machines need to have their power provided in a non-jarring way that prevents damage to the machine.
+		This is where a simple algorithm comes in the adds and order of smoothness to an incoming power supply.
+		The document here describes a simple method for achieving this.
+	\end{abstract}
+	
+	\section*{Single Phase Regulator}
+	A single phase regulator makes a input power stream $p_0$ into a continuous output power stream $p_1$.
+	A regulator has an internal energy storage $\phi$.
+	The output power $p_1$ is equal in magnitude to the current internal energy $\phi$.
+	This results in a continuous curve that moves between changes in $p_0$.
+	A simple differential equation can describe this effect.
+	\[\dv{\phi}{t} = p_0 - p_1\]
+	And since $\phi = p_1$,
+	\[\dv{p_1}{t} = p_0 - p_1\]
+	
+	Using a little bit of calculus, we can solve for $p_1$ in terms of a constant input power $p_0$, starting internal energy $\phi_0$, and time from start $t$.
+	\[p_1 = p_0 \pm e^{\ln(\pm\qty(\phi_0 - p_0)) - t}\]
+	The ``plus or minus'' symbols are there for when
+	\[\phi_0 - p_0\]
+	is greater than or less than zero in order to prevent plugging in negative numbers into the natural logarithm.
+	
+	\section*{Two Phase Regulator}
+	A two phase regulator will not only ensure that the output power is continuous, but it will also guarantee that it is differentiable, or smooth.
+	To construct it is as simple as connecting 2 single phase regulator to one another.
+	The following differential equations are produced.
+	\begin{align*}
+		\dv{p_1}{t} &= p_0 - p_1 \\
+		\dv{p_2}{t} &= p_1 - p_2
+	\end{align*}
+	
+	Solving this system for constant input power, starting internal energy, and time passed is as simple as plugging the last solution for the single phase regulator into itself.
+	
+	\section*{N-Phase Regulator}
+	This leads to the next step, which is a regulator with $n$ many single phase regulators.
+	The system of differential equations is just as expected.
+	\begin{align*}
+		\dv{p_1}{t} &= p_0 - p_1 \\
+		&\vdotswithin{=} \\
+		\dv{p_n}{t} &= p_{n-1} - p_n
+	\end{align*}
+	
+	\section*{Regulator Reaction Speed}
+	The reaction speed of a regulator, or how fast the output power changes when the input power changes, can be modified during any phase by multiplying the differential relationship by a constant.
+	A sequence of constants is chosen,
+	\[\qty(k_1, k_2, \dots, k_n)\]
+	And the differential equations are modified as shown.
+	\begin{align*}
+		\dv{p_1}{t} &= k_1 \qty(p_0 - p_1) \\
+		&\vdotswithin{=} \\
+		\dv{p_n}{t} &= k_n \qty(p_{n-1} - p_n)
+	\end{align*}
+	
+	Larger and smaller $k$ values lead to a faster and slower reacting regulator respectively.
+	
+	\section*{Extra Notes}
+\end{document}
